@@ -1,0 +1,12 @@
+accelerate==0.20.3
+diffusers==0.17.1
+ema-pytorch==0.2.3
+fire==0.5.0
+lmdb==1.4.1
+Pillow
+pytorch-lightning==2.0.3
+PyYaml==6.0
+safetensors==0.3.1
+tqdm
+wandb==0.15.4
+PyYaml==6.0
