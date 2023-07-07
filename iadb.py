@@ -53,10 +53,15 @@ def model_load_weights(model: UNet2DModel, file_path: str):
         else:
             state_dict = data
 
+        # Check if we have ema weights
+        has_ema = any(k.startswith('ema.') for k in state_dict.keys())
+
         # Re-map layer names
         cleaned_state_dict = {}
         for k, v in state_dict.items():
-            new_key = k.replace('model.', '')
+            if has_ema and not k.startswith('ema.ema_model.'):
+                continue            
+            new_key = k.replace('ema.ema_model.' if has_ema else 'model.', '')
             new_key = new_key.replace('.query.', '.to_q.')
             new_key = new_key.replace('.key.', '.to_k.')
             new_key = new_key.replace('.value.', '.to_v.')
@@ -71,11 +76,13 @@ def model_save_weights(model: UNet2DModel, file_path: str):
     """Saves the model weights to a safetensors file."""
     save_file(model.state_dict(), file_path)
 
-def model_ckpt_to_safetensors(config_path: str, ckpt_path: str, safetensors_path: str):
+def model_ckpt_to_safetensors(config_path: str, ckpt_path: str, safetensors_path: str, fp16: bool=True):
     """Converts a model checkpoint from training to a safetensors file for inference"""
     config = config_load(config_path)
     model = model_from_config(config)
     model_load_weights(model, ckpt_path)
+    if fp16:
+        model = model.half()
     save_file(model.state_dict(), safetensors_path)
     del model
 
