@@ -2,9 +2,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pharmapsychotic/iadb-fun/blob/main/notebooks/sampling.ipynb)
 
-<video width="256" height="256" controls>
-  <source src="media/cat-seed-slerp.mp4" type="video/mp4">
-</video>
+![cat interpolation](media/cat-interp256.gif)
 
 ## What's IADB?
 
