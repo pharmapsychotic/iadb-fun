@@ -51,12 +51,12 @@ def images_to_latents(lmdb_path: str, folder: str, resolution: int=512):
     transform = transforms.Compose([transforms.Resize(resolution), transforms.CenterCrop(resolution)])
 
     # 2x for hflip, 2 bytes per float16
-    max_size = int(1.1 * len(image_paths) * 2 * (4*64*64) * 2)
+    max_size = int(1.5 * len(image_paths) * 2 * (4*64*64) * 2)
 
     env = lmdb.open(lmdb_path, map_size=max_size)
     with env.begin(write=True) as txn:
         for i, image_path in enumerate(tqdm(image_paths)):
-            image = Image.open(image_path)
+            image = Image.open(image_path).convert('RGB')
             image = transform(image)
             for f in range(2):
                 latent = vae_encode(torchvision.transforms.functional.to_tensor(image).unsqueeze(0))
